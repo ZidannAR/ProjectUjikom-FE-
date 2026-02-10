@@ -30,7 +30,7 @@ const AttendanceScanner = () => {
 
     try {
       // Pastikan URL API sesuai dengan route Laravel Anda
-      const response = await axios.post("http://127.0.0.1:8000/api/attendance/scan", {
+      const response = await axios.post("https://nonforeign-pseudoaggressively-carly.ngrok-free.dev/api/attendance/scan", {
         employee_id: 1, // ID Tester
         qr_token: qrToken, // Token dinamis 5 detik [cite: 2026-01-30]
         device_id: deviceId, // Binding perangkat [cite: 2026-01-30]
