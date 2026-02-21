@@ -11,7 +11,7 @@ const AttendanceScanner = () => {
   const [status, setStatus] = useState("Siap Scan");
   
   // State untuk memilih ID Karyawan secara manual untuk testing
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState(1); 
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(2); 
 
   const scannerRef = useRef(null);
 
