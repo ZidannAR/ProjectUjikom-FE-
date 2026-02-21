@@ -50,16 +50,22 @@ const AttendanceScanner = () => {
         alert(response.data.message);
         setStatus("Selesai!");
       } catch (err) {
-        console.error("Detail Error Server:", err.response);
-
-        // 2. Ubah alert agar menampilkan data JSON lengkap dari Laravel
-        const dataErrorLengkap = err.response
-          ? JSON.stringify(err.response.data, null, 2)
-          : err.message;
-
-        alert("Data JSON dari Server:\n" + dataErrorLengkap);
-        setStatus("Gagal! Cek log di alert.");
-      }
+  // Ambil data error dari Laravel
+  const errorResponse = err.response?.data;
+  
+  // Jika ada debug_info, tampilkan semuanya
+  if (errorResponse && errorResponse.debug_info) {
+    alert(
+      "ERROR: " + errorResponse.message + "\n\n" +
+      "DETAIL DEBUG:\n" + JSON.stringify(errorResponse.debug_info, null, 2)
+    );
+  } else {
+    // Error standar lainnya
+    alert("Error: " + (errorResponse?.message || err.message));
+  }
+  
+  setStatus("Gagal! Data debug muncul di atas.");
+}
     },
     [lat, lng, deviceId, selectedEmployeeId],
   );
