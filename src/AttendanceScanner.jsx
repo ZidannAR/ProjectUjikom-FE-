@@ -49,7 +49,13 @@ const AttendanceScanner = () => {
       alert(response.data.message);
       setStatus("Selesai!");
     } catch (err) {
-      alert(err.response?.data?.message || "Terjadi kesalahan");
+      // 1. Munculkan error lengkap di Console browser
+      console.error("Detail Error Server:", err.response);
+      
+      // 2. Tangkap pesan error spesifik dari Laravel
+      const pesanError = err.response?.data?.message || err.response?.data?.error || err.message;
+      
+      alert("Error: " + pesanError);
       setStatus("Gagal! Scan ulang.");
     }
   }, [lat, lng, deviceId, selectedEmployeeId]);
