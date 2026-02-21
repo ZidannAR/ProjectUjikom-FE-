@@ -23,45 +23,50 @@ const AttendanceScanner = () => {
     getLocation();
   }, [getLocation]);
 
-  const handleAttendance = useCallback(
-    async (qrToken) => {
-      if (!lat || !lng) {
-        alert("GPS belum aktif! Pastikan izin lokasi diberikan.");
-        return;
-      }
+const handleAttendance = useCallback(
+  async (qrToken) => {
+    if (!lat || !lng) {
+      alert("GPS belum aktif! Pastikan izin lokasi diberikan.");
+      return;
+    }
 
-      setStatus("Sedang memproses...");
+    setStatus("Sedang memproses...");
 
-      try {
-        // Variabel dipetakan langsung agar tidak ada lagi error "not defined"
-        const dataAbsen = {
-          employee_id: selectedEmployeeId,
-          qr_token: qrToken,
-          device_id: deviceId,
-          lat: lat,
-          lng: lng,
-        };
+    try {
+      const dataAbsen = {
+        employee_id: selectedEmployeeId,
+        qr_token: qrToken,
+        device_id: deviceId,
+        lat: lat,
+        lng: lng,
+      };
 
-        const response = await axios.post(
-          "https://nonforeign-pseudoaggressively-carly.ngrok-free.dev/api/attendance/scan",
-          dataAbsen,
-        );
+      const response = await axios.post(
+        "https://nonforeign-pseudoaggressively-carly.ngrok-free.dev/api/attendance/scan",
+        dataAbsen
+      );
 
+      // --- PERUBAHAN DI SINI ---
+      // Jika server mengirim data debug, tampilkan di status
+      if (response.data.debug_token_seharusnya) {
+        setStatus("DEBUG DATA:\n" + JSON.stringify(response.data, null, 2));
+      } else {
         alert(response.data.message);
-        setStatus("Selesai!");
-      } catch (err) {
-  const serverResponse = err.response?.data;
-  
-  if (serverResponse) {
-    // Kita simpan seluruh JSON ke status agar kamu bisa baca di bawah scanner
-    setStatus(JSON.stringify(serverResponse, null, 2));
-  } else {
-    setStatus("Error: Tidak ada respon dari server. Cek Ngrok!");
-  }
-}
-    },
-    [lat, lng, deviceId, selectedEmployeeId],
-  );
+        setStatus("Selesai: " + response.data.message);
+      }
+      // -------------------------
+
+    } catch (err) {
+      const serverResponse = err.response?.data;
+      if (serverResponse) {
+        setStatus("ERROR SERVER:\n" + JSON.stringify(serverResponse, null, 2));
+      } else {
+        setStatus("Error: Tidak ada respon dari server. Cek Ngrok!");
+      }
+    }
+  },
+  [lat, lng, deviceId, selectedEmployeeId]
+);
 
   useEffect(() => {
     if (!deviceId || scannerRef.current) return;
