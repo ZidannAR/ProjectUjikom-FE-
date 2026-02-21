@@ -51,20 +51,17 @@ const AttendanceScanner = () => {
         setStatus("Selesai!");
       } catch (err) {
   // Ambil data error dari Laravel
-  const errorResponse = err.response?.data;
+  const errorData = err.response?.data;
   
-  // Jika ada debug_info, tampilkan semuanya
-  if (errorResponse && errorResponse.debug_info) {
-    alert(
-      "ERROR: " + errorResponse.message + "\n\n" +
-      "DETAIL DEBUG:\n" + JSON.stringify(errorResponse.debug_info, null, 2)
-    );
+  if (errorData) {
+    // Kita tampilkan JSON mentah ke dalam state status
+    setStatus(JSON.stringify(errorData, null, 2));
+    
+    // Opsional: Tetap munculkan alert singkat agar HP bergetar/notif
+    alert("Scan Gagal: " + (errorData.message || "Cek status di bawah"));
   } else {
-    // Error standar lainnya
-    alert("Error: " + (errorResponse?.message || err.message));
+    setStatus("Koneksi ke Server Gagal: " + err.message);
   }
-  
-  setStatus("Gagal! Data debug muncul di atas.");
 }
     },
     [lat, lng, deviceId, selectedEmployeeId],
