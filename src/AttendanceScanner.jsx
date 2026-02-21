@@ -57,13 +57,22 @@ const handleAttendance = useCallback(
       // -------------------------
 
     } catch (err) {
-      const serverResponse = err.response?.data;
-      if (serverResponse) {
-        setStatus("ERROR SERVER:\n" + JSON.stringify(serverResponse, null, 2));
-      } else {
-        setStatus("Error: Tidak ada respon dari server. Cek Ngrok!");
-      }
-    }
+  const serverResponse = err.response?.data;
+
+  if (serverResponse?.message === "QR Expired, silakan scan ulang.") {
+    setStatus("QR Expired — scan ulang...");
+    
+    // restart scanner
+    scannerRef.current?.render();
+    return;
+  }
+
+  if (serverResponse) {
+    setStatus("ERROR:\n" + JSON.stringify(serverResponse, null, 2));
+  } else {
+    setStatus("Error koneksi ke server.");
+  }
+}
   },
   [lat, lng, deviceId, selectedEmployeeId]
 );
