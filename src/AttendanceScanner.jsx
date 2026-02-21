@@ -97,9 +97,9 @@ const AttendanceScanner = () => {
           onChange={(e) => setSelectedEmployeeId(parseInt(e.target.value))}
           style={{ width: "100%", padding: "8px", borderRadius: "5px" }}
         >
-          <option value="1">Budi (Pagi)</option>
-          <option value="2">Siti (Siang)</option>
-          <option value="3">Maulana (Malam)</option>
+          <option value="2">Budi (Pagi)</option>
+          <option value="3">Siti (Siang)</option>
+          <option value="4">Maulana (Malam)</option>
         </select>
       </div>
 
