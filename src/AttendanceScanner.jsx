@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
-import axios from "axios";
+import api from "./api/axios";
 import { useGeolocation } from "./hooks/useGeolocation";
 import useAuth from "./hooks/useAuth";
 
@@ -44,6 +44,9 @@ const AttendanceScanner = () => {
         fps: 10,
         qrbox: { width: 250, height: 250 },
         aspectRatio: 1.0,
+        videoConstraints: {
+          facingMode: "environment",
+        },
       });
       scanner.render((decodedText) => {
         scanner.clear().then(() => handleAttendance(decodedText)).catch(console.error);
@@ -70,8 +73,8 @@ const AttendanceScanner = () => {
       setStatusMessage("Sedang memproses absensi...");
 
       try {
-        const response = await axios.post(
-          "http://localhost:8000/api/attendance/scan",
+        const response = await api.post(
+          "/attendance/scan",
           {
             employee_id: employee.id,
             qr_token: qrToken,
@@ -113,6 +116,9 @@ const AttendanceScanner = () => {
       fps: 10,
       qrbox: { width: 250, height: 250 },
       aspectRatio: 1.0,
+      videoConstraints: {
+        facingMode: "environment",
+      },
     });
 
     scanner.render((decodedText) => {
