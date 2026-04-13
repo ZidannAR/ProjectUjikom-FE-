@@ -93,7 +93,7 @@ function WalletContent() {
         <div className="gf-tab-content">
           {activeTab === 'riwayat' && <LedgerHistory />}
           {activeTab === 'marketplace' && <Marketplace onToast={handleToast} />}
-          {activeTab === 'inventori' && <TokenInventory onSwitchTab={handleSwitchTab} />}
+          {activeTab === 'inventori' && <TokenInventory onSwitchTab={handleSwitchTab} onToast={handleToast} />}
         </div>
       </div>
     </div>

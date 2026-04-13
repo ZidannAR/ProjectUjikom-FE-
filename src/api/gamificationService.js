@@ -31,3 +31,16 @@ export const purchaseItem = (itemId) =>
  * Daftar token AVAILABLE milik employee.
  */
 export const getMyTokens = () => api.get('/gamification/tokens');
+
+/**
+ * POST /api/gamification/tokens/{tokenId}/activate-wfh
+ * Aktifkan token WFH dengan memilih tanggal.
+ */
+export const activateWFHToken = (tokenId, wfhDate) =>
+  api.post(`/gamification/tokens/${tokenId}/activate-wfh`, { wfh_date: wfhDate });
+
+/**
+ * GET /api/gamification/tokens/wfh-schedule
+ * Daftar jadwal WFH yang sudah dijadwalkan.
+ */
+export const getWFHSchedule = () => api.get('/gamification/tokens/wfh-schedule');

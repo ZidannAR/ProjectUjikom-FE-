@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { getMyTokens } from '../../api/gamificationService';
+import { useState, useEffect, useCallback } from 'react';
+import { getMyTokens, getWFHSchedule } from '../../api/gamificationService';
+import WFHDatePicker from './WFHDatePicker';
 
 const TYPE_ICONS = {
   LATE_FORGIVENESS:   '⏰',
@@ -13,24 +14,48 @@ function formatDateID(isoString) {
   return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
-export default function TokenInventory({ onSwitchTab }) {
+function formatDateIDFull(dateStr) {
+  if (!dateStr) return '-';
+  const d = new Date(dateStr + (dateStr.includes('T') ? '' : 'T00:00:00'));
+  return d.toLocaleDateString('id-ID', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+  });
+}
+
+export default function TokenInventory({ onSwitchTab, onToast }) {
   const [tokens, setTokens] = useState([]);
+  const [wfhSchedule, setWfhSchedule] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [wfhPickerToken, setWfhPickerToken] = useState(null);
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [tokensRes, scheduleRes] = await Promise.all([
+        getMyTokens(),
+        getWFHSchedule().catch(() => ({ data: [] })),
+      ]);
+      setTokens(Array.isArray(tokensRes.data) ? tokensRes.data : []);
+      setWfhSchedule(Array.isArray(scheduleRes.data) ? scheduleRes.data : []);
+    } catch (err) {
+      console.error('Token fetch error', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetch = async () => {
-      setLoading(true);
-      try {
-        const res = await getMyTokens();
-        setTokens(Array.isArray(res.data) ? res.data : []);
-      } catch (err) {
-        console.error('Token fetch error', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetch();
-  }, []);
+    fetchData();
+  }, [fetchData]);
+
+  const handleWFHSuccess = (dateStr) => {
+    setWfhPickerToken(null);
+    onToast?.({
+      type: 'success',
+      message: `Token WFH berhasil dijadwalkan untuk ${formatDateIDFull(dateStr)}!`,
+    });
+    fetchData();
+  };
 
   if (loading) {
     return (
@@ -86,10 +111,12 @@ export default function TokenInventory({ onSwitchTab }) {
         tokens.map((token) => {
           const item = token.item || {};
           const icon = TYPE_ICONS[item.item_type] || '🎯';
+          const isWFH = item.item_type === 'WFH';
+          const hasWfhDate = isWFH && token.wfh_date;
 
           return (
             <div key={token.id} className="gf-token-card">
-              {/* Left dashed border accent */}
+              {/* Left accent */}
               <div className="gf-token-accent" />
 
               <div style={{ padding: '16px 16px 16px 20px' }}>
@@ -122,10 +149,44 @@ export default function TokenInventory({ onSwitchTab }) {
                     Token ini akan otomatis digunakan sistem saat kamu tidak hadir
                   </p>
                 )}
-                {item.item_type === 'WFH' && (
+                {isWFH && !hasWfhDate && (
                   <p style={{ fontSize: 12, color: '#667eea', margin: '0 0 8px', fontWeight: 600 }}>
                     Gunakan token ini untuk bekerja dari rumah
                   </p>
+                )}
+
+                {/* WFH: Scheduled badge OR Schedule button */}
+                {isWFH && (
+                  hasWfhDate ? (
+                    <div style={{
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      background: '#dcfce7', borderRadius: 10,
+                      padding: '8px 14px', margin: '10px 0 4px',
+                    }}>
+                      <span style={{ fontSize: 14 }}>✅</span>
+                      <div>
+                        <p style={{ fontSize: 12, fontWeight: 700, color: '#16a34a', margin: 0 }}>
+                          Dijadwalkan: {formatDateIDFull(token.wfh_date)}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setWfhPickerToken(token)}
+                      style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        gap: 6, width: '100%', padding: '10px 0',
+                        borderRadius: 12, border: 'none',
+                        background: 'linear-gradient(135deg, #3b82f6, #06b6d4)',
+                        color: 'white', fontWeight: 700, fontSize: 13,
+                        cursor: 'pointer', marginTop: 10,
+                        boxShadow: '0 3px 12px rgba(59,130,246,0.30)',
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      📅 Jadwalkan WFH
+                    </button>
+                  )
                 )}
 
                 {/* Dates */}
@@ -143,6 +204,67 @@ export default function TokenInventory({ onSwitchTab }) {
             </div>
           );
         })
+      )}
+
+      {/* ═══ Jadwal WFH Section ═══ */}
+      <div style={{ marginTop: 8 }}>
+        <h4 style={{
+          fontWeight: 800, fontSize: 15, color: '#1e293b',
+          margin: '0 0 10px', display: 'flex', alignItems: 'center', gap: 6,
+        }}>
+          📅 Jadwal WFH Saya
+        </h4>
+
+        {wfhSchedule.length === 0 ? (
+          <p style={{ fontSize: 13, color: '#94a3b8', fontWeight: 500, textAlign: 'center', padding: '12px 0' }}>
+            Belum ada jadwal WFH
+          </p>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {wfhSchedule.map((schedule, i) => (
+              <div key={schedule.id || i} style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                background: 'white', borderRadius: 14,
+                padding: '12px 16px',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.04)',
+              }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: 12,
+                  background: 'linear-gradient(135deg, #dbeafe, #e0e7ff)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 18, flexShrink: 0,
+                }}>
+                  🏠
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{
+                    fontWeight: 700, fontSize: 13, color: '#1e293b', margin: 0,
+                  }}>
+                    {formatDateIDFull(schedule.wfh_date)}
+                  </p>
+                  <p style={{ fontSize: 11, color: '#94a3b8', margin: '2px 0 0', fontWeight: 500 }}>
+                    Menunggu hari H
+                  </p>
+                </div>
+                <span style={{
+                  fontSize: 10, fontWeight: 700, color: '#3b82f6',
+                  background: '#dbeafe', padding: '3px 8px', borderRadius: 6,
+                }}>
+                  WFH
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* WFH Date Picker Modal */}
+      {wfhPickerToken && (
+        <WFHDatePicker
+          token={wfhPickerToken}
+          onClose={() => setWfhPickerToken(null)}
+          onSuccess={handleWFHSuccess}
+        />
       )}
     </div>
   );
