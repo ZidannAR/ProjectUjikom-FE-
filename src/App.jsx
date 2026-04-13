@@ -9,6 +9,8 @@ import Dashboard from './pages/Dashboard';
 import AttendanceHistory from './pages/AttendanceHistory';
 import Leave from './pages/Leave';
 import Profile from './pages/Profile';
+import Assessment from './pages/Assessment';
+import IntegrityWallet from './pages/IntegrityWallet';
 
 export default function App() {
   return (
@@ -26,6 +28,8 @@ export default function App() {
         <Route path="/attendance-history" element={<ProtectedRoute><AttendanceHistory /><BottomNav /></ProtectedRoute>} />
         <Route path="/leave" element={<ProtectedRoute><Leave /><BottomNav /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /><BottomNav /></ProtectedRoute>} />
+        <Route path="/assessment" element={<ProtectedRoute><Assessment /><BottomNav /></ProtectedRoute>} />
+        <Route path="/integrity-wallet" element={<ProtectedRoute><IntegrityWallet /><BottomNav /></ProtectedRoute>} />
 
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>

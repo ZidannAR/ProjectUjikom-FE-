@@ -161,7 +161,7 @@ export default function Leave() {
         </div>
       </div>
 
-      <div className="page-content" style={{ marginTop: -20 }}>
+      <div className="page-content" style={{ marginTop: 20 }}>
         {/* ===== TABS ===== */}
         <div className="tab-bar" style={{ marginBottom: 16 }}>
           <button className={`tab-item ${tab === 'form' ? 'active' : ''}`} onClick={() => setTab('form')}>

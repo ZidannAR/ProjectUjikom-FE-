@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import api from '../api/axios';
 import Badge from '../components/Badge';
@@ -9,6 +10,7 @@ const DAYS = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
 
 export default function AttendanceHistory() {
   const { employee } = useAuth();
+  const navigate = useNavigate();
   const now = new Date();
   const [month, setMonth] = useState(now.getMonth() + 1);
   const [year, setYear] = useState(now.getFullYear());
@@ -34,23 +36,48 @@ export default function AttendanceHistory() {
 
   return (
     <div className="animate-in">
-      {/* ===== HEADER ===== */}
-      <div className="page-header">
-        <div style={{ position: 'relative', zIndex: 2 }}>
-          <h1 style={{ fontSize: 22, fontWeight: 800, margin: 0 }}>Riwayat Absensi</h1>
-          <p style={{ fontSize: 13, opacity: 0.8, marginTop: 4 }}>Rekap kehadiran {employee?.full_name || ''}</p>
-        </div>
-      </div>
 
-      <div className="page-content" style={{ marginTop: -20 }}>
-        {/* ===== FILTER PILLS ===== */}
-        <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+      {/* ===== FIXED HEADER + FILTER ===== */}
+      <div style={{
+        position: 'fixed', top: 0, left: '50%', transform: 'translateX(-50%)',
+        width: '100%', maxWidth: 480, zIndex: 50,
+      }}>
+        {/* Gradient header — tampilan asli */}
+        <div className="page-header" style={{ paddingBottom: 28, borderRadius: 0 }}>
+          <div style={{ position: 'relative', zIndex: 2 }}>
+            <button
+              onClick={() => navigate('/dashboard')}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                background: 'rgba(255,255,255,0.18)', border: 'none',
+                borderRadius: 12, padding: '6px 14px', color: 'white',
+                fontWeight: 600, fontSize: 13, cursor: 'pointer',
+                marginBottom: 12, backdropFilter: 'blur(4px)',
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+              Kembali
+            </button>
+            <h1 style={{ fontSize: 22, fontWeight: 800, margin: 0 }}>Riwayat Absensi 📅</h1>
+            <p style={{ fontSize: 13, opacity: 0.8, marginTop: 4 }}>Rekap kehadiran {employee?.full_name || ''}</p>
+          </div>
+        </div>
+
+        {/* Filter tanggal fixed */}
+        <div style={{
+          background: 'white',
+          padding: '10px 20px',
+          display: 'flex', gap: 8,
+          boxShadow: '0 4px 16px rgba(59,130,246,0.10)',
+        }}>
           <select
             value={month}
             onChange={e => setMonth(Number(e.target.value))}
             style={{
-              flex: 1, padding: '10px 14px', borderRadius: 14,
-              border: '2px solid #dbeafe', background: 'white',
+              flex: 1, padding: '8px 12px', borderRadius: 12,
+              border: '2px solid #dbeafe', background: '#f8fbff',
               fontWeight: 600, fontSize: 13, color: '#3b82f6',
               cursor: 'pointer', outline: 'none',
             }}
@@ -63,8 +90,8 @@ export default function AttendanceHistory() {
             value={year}
             onChange={e => setYear(Number(e.target.value))}
             style={{
-              padding: '10px 14px', borderRadius: 14,
-              border: '2px solid #dbeafe', background: 'white',
+              padding: '8px 12px', borderRadius: 12,
+              border: '2px solid #dbeafe', background: '#f8fbff',
               fontWeight: 600, fontSize: 13, color: '#3b82f6',
               cursor: 'pointer', outline: 'none',
             }}
@@ -74,6 +101,10 @@ export default function AttendanceHistory() {
             ))}
           </select>
         </div>
+      </div>
+
+      {/* ===== CONTENT ===== */}
+      <div style={{ paddingTop: 230, paddingLeft: 20, paddingRight: 20, paddingBottom: 120 }}>
 
         {/* ===== LIST ===== */}
         {loading ? (

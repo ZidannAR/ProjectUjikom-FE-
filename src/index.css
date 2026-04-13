@@ -293,3 +293,312 @@ body {
 .page-content {
   padding: 0 20px 100px;
 }
+
+/* ═══════════════════════════════════════════════
+   GAMIFICATION MODULE — "Dompet Integritas"
+   ═══════════════════════════════════════════════ */
+
+/* Page header — purple-blue gradient */
+.gf-page-header {
+  background: linear-gradient(135deg, #1e1b4b, #667eea, #764ba2);
+  color: white;
+  border-radius: 0 0 var(--radius-header) var(--radius-header);
+  min-height: 180px;
+  padding: 24px 20px 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.gf-page-header::before {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50%;
+  top: -60px;
+  right: -40px;
+}
+
+.gf-page-header::after {
+  content: '';
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+  bottom: -30px;
+  left: -20px;
+}
+
+/* ── Wallet Balance Card ── */
+.gf-wallet-card {
+  background: linear-gradient(135deg, #1e1b4b, #667eea, #764ba2);
+  border-radius: var(--radius-card);
+  box-shadow: 0 8px 32px rgba(102,126,234,0.30);
+  padding: 28px 24px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.gf-wallet-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+
+.gf-wallet-circle-1 {
+  width: 180px;
+  height: 180px;
+  top: -50px;
+  right: -40px;
+}
+
+.gf-wallet-circle-2 {
+  width: 100px;
+  height: 100px;
+  bottom: -30px;
+  left: -20px;
+  background: rgba(255,255,255,0.04);
+}
+
+.gf-wallet-circle-3 {
+  width: 60px;
+  height: 60px;
+  top: 50%;
+  left: 15%;
+  background: rgba(255,255,255,0.03);
+  animation: gfFloat 6s ease-in-out infinite;
+}
+
+@keyframes gfFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.gf-points-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.gf-points-number {
+  font-size: 44px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+/* Shimmer overlay for wallet card */
+.gf-wallet-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.06),
+    transparent
+  );
+  animation: gfShimmer 3s ease-in-out infinite;
+}
+
+@keyframes gfShimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* ── Tab Bar ── */
+.gf-tab-bar {
+  display: flex;
+  background: #e2e8f0;
+  border-radius: 14px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.gf-tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 10px 4px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+  background: transparent;
+  color: #64748b;
+}
+
+.gf-tab-item.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 2px 10px rgba(102,126,234,0.30);
+}
+
+.gf-tab-content {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ── Ledger History Item ── */
+.gf-ledger-item {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.gf-ledger-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+/* ── Marketplace Grid ── */
+.gf-marketplace-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.gf-marketplace-card {
+  background: white;
+  border-radius: var(--radius-card);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gf-marketplace-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(102,126,234,0.15);
+}
+
+/* Purchase button */
+.gf-btn-purchase {
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(102,126,234,0.30);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.gf-btn-purchase:hover {
+  transform: scale(1.03);
+  box-shadow: 0 5px 18px rgba(102,126,234,0.40);
+}
+
+.gf-btn-purchase:active {
+  transform: scale(0.97);
+}
+
+.gf-btn-purchase-disabled {
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 12px;
+  border: none;
+  background: #e2e8f0;
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: not-allowed;
+}
+
+/* ── Token Card (Ticket style) ── */
+.gf-token-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease;
+}
+
+.gf-token-card:hover {
+  transform: translateY(-1px);
+}
+
+.gf-token-accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: linear-gradient(180deg, #667eea, #764ba2);
+  border-radius: 5px 0 0 5px;
+}
+
+/* ── Info Box ── */
+.gf-info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  padding: 12px 16px;
+}
+
+/* ── Modal ── */
+.gf-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.gf-modal {
+  background: white;
+  border-radius: 24px;
+  padding: 28px 24px;
+  max-width: 360px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  animation: gfModalIn 0.3s ease-out;
+}
+
+@keyframes gfModalIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Spinner ── */
+.gf-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* ── Skeleton pulse (reuse existing shimmer) ── */
+@keyframes gfPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

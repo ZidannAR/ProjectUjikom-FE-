@@ -41,6 +41,27 @@ const tabs = [
       </svg>
     ),
   },
+  {
+    to: '/integrity-wallet',
+    label: 'Dompet',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 3h12l4 6-10 13L2 9z" />
+        <path d="M11 3l1 6h6" />
+        <path d="M7 9l5-6" />
+        <path d="M2 9h20" />
+      </svg>
+    ),
+  },
+  {
+    to: '/assessment',
+    label: 'Nilai',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+      </svg>
+    ),
+  },
 ];
 
 export default function BottomNav() {
@@ -55,13 +76,13 @@ export default function BottomNav() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: 3,
+              gap: 2,
               textDecoration: 'none',
-              fontSize: 11,
+              fontSize: 10,
               fontWeight: 600,
-              padding: '6px 10px',
-              borderRadius: 14,
-              minWidth: 60,
+              padding: '6px 6px',
+              borderRadius: 12,
+              minWidth: 48,
               color: isActive ? '#3b82f6' : '#94a3b8',
               background: isActive ? 'linear-gradient(135deg, rgba(59,130,246,0.08), rgba(6,182,212,0.06))' : 'transparent',
               transition: 'all 0.2s ease',
