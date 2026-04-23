@@ -252,8 +252,8 @@ export default function TicketDetailPage() {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {responses.map((msg, idx) => {
-                const isAdmin = msg.is_admin || msg.responder_type === 'admin';
-                const senderName = isAdmin ? 'Admin' : (msg.user?.name || msg.sender_name || employee?.full_name || 'Anda');
+                const isAdmin = msg.is_admin_reply === true || msg.is_admin_reply === 1;
+                const senderName = isAdmin ? 'Admin' : (msg.responder?.full_name || msg.responder?.name || 'Karyawan');
                 const initials = isAdmin ? 'AD' : getInitials(senderName);
 
                 return (
