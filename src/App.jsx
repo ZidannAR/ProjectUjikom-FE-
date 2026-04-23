@@ -11,6 +11,9 @@ import Leave from './pages/Leave';
 import Profile from './pages/Profile';
 import Assessment from './pages/Assessment';
 import IntegrityWallet from './pages/IntegrityWallet';
+import HelpdeskPage from './pages/Helpdesk/HelpdeskPage';
+import CreateTicketPage from './pages/Helpdesk/CreateTicketPage';
+import TicketDetailPage from './pages/Helpdesk/TicketDetailPage';
 
 export default function App() {
   return (
@@ -30,6 +33,9 @@ export default function App() {
         <Route path="/profile" element={<ProtectedRoute><Profile /><BottomNav /></ProtectedRoute>} />
         <Route path="/assessment" element={<ProtectedRoute><Assessment /><BottomNav /></ProtectedRoute>} />
         <Route path="/integrity-wallet" element={<ProtectedRoute><IntegrityWallet /><BottomNav /></ProtectedRoute>} />
+        <Route path="/helpdesk" element={<ProtectedRoute><HelpdeskPage /><BottomNav /></ProtectedRoute>} />
+        <Route path="/helpdesk/create" element={<ProtectedRoute><CreateTicketPage /><BottomNav /></ProtectedRoute>} />
+        <Route path="/helpdesk/:ticketId" element={<ProtectedRoute><TicketDetailPage /><BottomNav /></ProtectedRoute>} />
 
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>

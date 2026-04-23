@@ -62,6 +62,16 @@ const tabs = [
       </svg>
     ),
   },
+  {
+    to: '/helpdesk',
+    label: 'Helpdesk',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M15 5v2" /><path d="M15.09 13a4 4 0 0 1-3.09 5H6l-3 3V6a2 2 0 0 1 2-2h8.09" />
+        <path d="M21 3l-2 2" /><path d="M21 7l-2-2" /><path d="M19 5h-4" />
+      </svg>
+    ),
+  },
 ];
 
 export default function BottomNav() {
